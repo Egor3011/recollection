@@ -1,5 +1,8 @@
 <script setup>
+import { inject } from 'vue';
 import { RouterLink } from 'vue-router'
+
+const cartList = inject("carts")
 </script>
 
 <template>
@@ -12,9 +15,13 @@ import { RouterLink } from 'vue-router'
             </div>
         </RouterLink>
         <div class="linksBut">
-            <RouterLink to="/faq">FAQ</RouterLink>
+            <RouterLink to="/faq" style="align-items: center;">
+                FAQ
+            </RouterLink>
             <RouterLink to="/order">Под заказ</RouterLink>
-            <RouterLink to="/cart">Корзина</RouterLink>
+            <RouterLink to="/cart">Корзина 
+                <span v-if="cartList.length > 0">({{ cartList.length }})</span>
+            </RouterLink>
         </div>
     </div>
 </template>

@@ -15,7 +15,7 @@ const adres = 'asdasda'
 
 
 const promokodPrice = 5
-const promocode = ''
+var promocode = ''
 
 
 const discription = 'asdsadas'
@@ -30,7 +30,9 @@ const checkPrice = async () => {
         fullPrice = fullPrice + Number(cartList.value[i].price)
     }
     console.log(fullPrice)
-
+    if(promokodPrice != 0) {
+        fullPrice = Math.round(fullPrice / 100 * (100 - promokodPrice))
+    }
     const element = document.getElementById('ppriceCart');
     element.textContent = String(fullPrice) + ' руб.';
 }
@@ -74,8 +76,12 @@ onMounted(() => {
     checkPrice()
 });
 
+watch(promocode, async () => {
+  alert("noooooo")
+})
 
-watch(promocode, () => {
+watch(promocode, async () => {
+    alert("эээ сука")
     const skidka = axios.get("http://176.109.111.74:8000/promo/" + promocode).data
     if (skidka != {"detail": "Item not found"}) {
         if(confirm("Хотите ли вы применить скидку " + skidka + "% ?")) {
@@ -83,6 +89,7 @@ watch(promocode, () => {
         }
     }
 })
+
 
 
 console.log(cartList)
@@ -105,6 +112,7 @@ provide("delItem", delItem)
     <div>
         <div style="display: flex; justify-content: space-between;">
             <h2>Итого</h2>
+            <h3 v-if="promokodPrice > 0" style="color: #888;">- {{ promokodPrice }}% / -{{ Math.round(promokodPrice*(fullPrice / (100 - promokodPrice))) }} руб.</h3>
             <h2 id="ppriceCart">{{ fullPrice }} руб.</h2>
         </div>
         <div class="containerOrderCart">

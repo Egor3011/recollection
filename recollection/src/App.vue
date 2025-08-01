@@ -82,7 +82,6 @@ watch(selectCard, async () => {
 
 
 watch(priceSort, async () => {
-  console.log("jjjjjj")
   reloadCards()
 })
 
