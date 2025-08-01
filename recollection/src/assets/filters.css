@@ -1,0 +1,57 @@
+.filtersContainer {
+    display: flex;
+    justify-content: space-between;
+    font-family: Montserrat-Regular;
+    align-items: center;
+}
+
+.formatSortItems {
+    p:hover {
+        color: var(--secondColorText);
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    p {
+        transition: 0.4s;
+    }
+}
+
+select {
+  min-width: 224px;
+  height: 44px;
+  background: var(--background);
+  color: var(--mainText);
+
+  border: 1px solid var(--mainText);  
+  border-radius: 10px;
+  padding-left: 20px;
+
+  margin-right: 50px;
+}
+
+
+option {
+  background: var(--background);
+  color: var(--background);
+}
+
+
+.inputsCatalFilters {
+    display: flex;
+    gap: 20px;
+}
+
+@media(max-width: 1024px) {
+    .filtersContainer {
+        display: block;
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    select {
+        margin-right: 0px;
+    }
+    .inputsCatalFilters {
+        display: grid;
+        padding: 40px;
+    }
+}

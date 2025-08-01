@@ -1,0 +1,122 @@
+@import './base.css';
+
+body {
+  margin: 80px 10%;
+
+  background: var(--background);
+  
+  border: 1px solid var(--mainText);
+  border-radius: 25px;
+
+  color: var(--mainText);
+
+  font-family: 'Montserrat-Medium';
+}
+
+@media(max-width: 1024px) {
+  body {
+    margin: 30px 10px;
+  }
+  .linksBut {
+        display: inline-block;
+    }
+  h1 {
+    font-size: 26px;
+  }
+  h2 {
+    font-size: 22px;
+  }
+}
+
+
+h1,
+h2,
+h3 {
+  font-family: Bounded;
+}
+
+
+
+a {
+  color: var(--mainText);
+  text-decoration: underline;
+  transition: 0.3s;
+}
+
+a:hover {
+  color: color-mix(in srgb, var(--secondColorText) 80%, var(--background) 20%);
+  transition: 0.1s;
+}
+
+
+
+
+input {
+  min-width: 200px;
+  height: 40px;
+
+  background: none;
+
+  color: var(--mainText);
+
+  font-size: 14px;
+  font-family: 'Montserrat-Regular';
+
+  padding-left: 20px;
+
+  border: 1px solid var(--mainText);  
+  border-radius: 10px;
+}
+
+button:not(.buttonSizes) {
+  color: var(--mainText);
+
+  font-family: 'Bounded';
+  font-size: 20px;
+
+  background: var(--secondColorText);
+
+  border-radius: 10px;
+  border: none;
+
+  min-width: 200px;
+
+  padding: 0px 20px;
+
+  height: 45px;
+
+  transition: 0.25s;
+}
+
+button:hover:not(.buttonSizes)  {
+  background: color-mix(in srgb, var(--secondColorText) 80%, var(--background) 20%);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--secondColorText) 80%, var(--background) 20%);
+
+  transform: translate(5px, 0);
+  transition: 0.15s;
+}
+
+
+details {
+  font-size: 18px;
+  margin: 25px 0;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+details:open {
+  color: var(--secondColorText);
+  transition: 0.2s;
+}
+
+
+summary {
+  font-family: 'Bounded';
+  font-size: 22px;
+}
+
+
+.openCardInfo {
+  border-radius: 20px;
+  border: 1px solid var(--secondColorText);
+}
