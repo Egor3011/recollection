@@ -1,5 +1,5 @@
 <script setup>
-import { ref, provide, inject, onMounted } from 'vue';
+import { ref, provide, inject, onMounted, watch } from 'vue';
 
 import cartItem from '@/components/cartItem.vue';
 import axios from 'axios';
@@ -13,9 +13,12 @@ const contact = 'asdasd'
 const city = 'asdasd'
 const adres = 'asdasda'
 
-const discription = 'asdsadas'
 
 const promokodPrice = 5
+const promocode = ''
+
+
+const discription = 'asdsadas'
 
 
 var fullPrice = 0
@@ -72,6 +75,16 @@ onMounted(() => {
 });
 
 
+watch(promocode, () => {
+    const skidka = axios.get("http://176.109.111.74:8000/promo/" + promocode).data
+    if (skidka != {"detail": "Item not found"}) {
+        if(confirm("Хотите ли вы применить скидку " + skidka + "% ?")) {
+            promokodPrice = skidka
+        }
+    }
+})
+
+
 console.log(cartList)
 
 provide("delItem", delItem)
@@ -123,7 +136,7 @@ provide("delItem", delItem)
     <div class="bottomPromoContainer">
         <div>
             <p>Промокод</p>
-            <input type="text">
+            <input type="text" placeholder="Промокод" v-model="promocode">
         </div>
         <button @click="createNewOrder">Оформить заказ</button>
     </div>
