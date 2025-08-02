@@ -8,17 +8,17 @@ const cartList = inject("carts")
 
 const deleteItem = inject("removeItemFromCart")
 
-const name = 'asdasd'
-const contact = 'asdasd'
-const city = 'asdasd'
-const adres = 'asdasda'
+var name = ''
+var contact = ''
+var city = ''
+var adres = ''
 
 
-const promokodPrice = 5
+var promokodPrice = 0
 var promocode = ''
 
 
-const discription = 'asdsadas'
+const discription = ''
 
 
 var fullPrice = 0
@@ -31,6 +31,8 @@ const checkPrice = async () => {
     }
     console.log(fullPrice)
     if(promokodPrice != 0) {
+        const element = document.getElementById('oldPriceCart');
+        element.textContent = String(fullPrice) + ' руб.';
         fullPrice = Math.round(fullPrice / 100 * (100 - promokodPrice))
     }
     const element = document.getElementById('ppriceCart');
@@ -50,45 +52,51 @@ const delItem = async (idDel) => {
 
 const createNewOrder = () => {
     if (confirm('Заказать товары?')) {
-        const obj = {
-            items: cartList.value,
-            promokod: promokodPrice,
-            discription: discription,
-            name: name,
-            contact: contact,
-            fullAdres: city
-        }
-        console.log(obj)
-        axios.post("http://176.109.111.74:8000/order/newOrderCart", obj).then((res) => {
-            if(res.data.Status == "OK") {
-                console.log("++++")
-                alert("Заявка на заказ товаров отправленна. Ожидайте сообщения от администратора магазина в течении нескольких минут")
+        if (name != '' || contact != '' || city != '') {
+            const obj = {
+                items: cartList.value,
+                promokod: promokodPrice,
+                discription: discription,
+                name: name,
+                contact: contact,
+                fullAdres: city + adres
             }
-        }).catch(error => {
-            alert(error)
-        })
+            console.log(obj)
+            axios.post("http://176.109.111.74:8000/order/newOrderCart", obj).then((res) => {
+                if(res.data.Status == "OK") {
+                    alert("Заявка на заказ товаров отправленна. Ожидайте сообщения от администратора магазина в течении нескольких минут")
+                }
+            }).catch(error => {
+                alert(error)
+            })
+        }
+        else {
+            alert("Проверьте правильно введеных данных")
+            
+        }
+        
     }
+}
 
+const checkPromo = () => {
+    const skidka = axios.get("http://176.109.111.74:8000/promo/" + promocode).then(
+        (res) => {
+            if(confirm("Хотите ли вы применить скидку " + res.data + "% ?")) {
+                promokodPrice = res.data
+                const elS = document.getElementById('ppromoCart')
+                elS.textContent = "-" + String(promokodPrice) + '%'
+                checkPrice()
+            }
+        }
+    ).catch(error => {
+        alert(error.data)
+    })
 }
 
 
 onMounted(() => {       
     checkPrice()
 });
-
-watch(promocode, async () => {
-  alert("noooooo")
-})
-
-watch(promocode, async () => {
-    alert("эээ сука")
-    const skidka = axios.get("http://176.109.111.74:8000/promo/" + promocode).data
-    if (skidka != {"detail": "Item not found"}) {
-        if(confirm("Хотите ли вы применить скидку " + skidka + "% ?")) {
-            promokodPrice = skidka
-        }
-    }
-})
 
 
 
@@ -100,6 +108,7 @@ provide("delItem", delItem)
 
 
 <template>
+    <h1>{{ promocode }}</h1>
     <h1>Корзина</h1>
     <div v-if="cartList.length < 1" style="align-content: center; text-align: center; height: 600px;">
         <h2>Увы, но вы ничего не добавили:(</h2>
@@ -110,10 +119,13 @@ provide("delItem", delItem)
     </div>
     <div style="border-bottom: 1.5px solid #FFFFFF;"></div>
     <div>
-        <div style="display: flex; justify-content: space-between;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
             <h2>Итого</h2>
-            <h3 v-if="promokodPrice > 0" style="color: #888;">- {{ promokodPrice }}% / -{{ Math.round(promokodPrice*(fullPrice / (100 - promokodPrice))) }} руб.</h3>
-            <h2 id="ppriceCart">{{ fullPrice }} руб.</h2>
+            <h3 id="ppromoCart" style="color: #888;"></h3>
+            <div>
+                <h4 id="oldPriceCart" style="color: #888; text-decoration: line-through;"></h4>
+                <h2 id="ppriceCart">{{ fullPrice }} руб.</h2>
+            </div>
         </div>
         <div class="containerOrderCart">
             <div>
@@ -142,9 +154,10 @@ provide("delItem", delItem)
     </div>
     <a href="">Заказывая товары вы соглашаетесь с условиями пользования сайта</a>
     <div class="bottomPromoContainer">
-        <div>
+        <div style="gap: 20px;">
             <p>Промокод</p>
             <input type="text" placeholder="Промокод" v-model="promocode">
+            <button @click="checkPromo">Проверить промокод</button>
         </div>
         <button @click="createNewOrder">Оформить заказ</button>
     </div>
